@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Form</title>
+</head>
+<body>
+  <h1>Registration Form</h1>
+  <form id="regForm">
+    <label for="firstname">First Name:</label>
+    <input type="text" id="firstname" name="firstname" required><br><br>
+    <label for="lastname">Last Name:</label>
+    <input type="text" id="lastname" name="lastname" required><br><br>
+    <label for="yearborn">Year Born:</label>
+    <input type="number" id="yearborn" name="yearborn" required><br><br>
+    <button type="submit">Submit</button>
+  </form>
+  <div id="response"></div>
+
+  <script>
+    document.getElementById('regForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const data = {
+        firstname: document.getElementById('firstname').value,
+        lastname: document.getElementById('lastname').value,
+        yearborn: Number(document.getElementById('yearborn').value)
+      };
+
+      try {
+        const response = await fetch('http://localhost:8081/submitform', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.text();
+        document.getElementById('response').innerText = result;
+      } catch (err) {
+        document.getElementById('response').innerText = 'Error: ' + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
